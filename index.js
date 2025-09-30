@@ -1,3 +1,4 @@
+
 const express = require('express');
 const http = require('http');
 const mongoose = require('mongoose');
@@ -61,7 +62,7 @@ app.post("/send-email", async (req, res) => {
     const { to, subject, message } = req.body;
 
     const mailOptions = {
-      from: "subramanyamchoda1@gmail.com",
+      from: "saisubbusai0@gmail.com",
       to,
       subject,
       text: message,
