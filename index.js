@@ -6,7 +6,7 @@ const dotenv = require('dotenv');
 const multer = require('multer');
 const { Readable } = require('stream');
 const { Server } = require('socket.io');
-
+const nodemailer = require("nodemailer");
 // Import configs
 const connectDB = require('./config/db');
 const { initEmail } = require('./config/email');
@@ -47,6 +47,35 @@ app.get('/', (req, res) => {
   res.send("Welcome to the chat & file upload server");
 });
 
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+  user: process.env.EMAIL_USER,
+  pass: process.env.EMAIL_PASS,
+  }
+});
+
+
+app.post("/send-email", async (req, res) => {
+  try {
+    const { to, subject, message } = req.body;
+
+    const mailOptions = {
+      from: "subramanyamchoda1@gmail.com",
+      to,
+      subject,
+      text: message,
+    };
+
+    await transporter.sendMail(mailOptions);
+    res.json({ success: true, message: "Email sent successfully!" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: "Failed to send email." });
+  }
+});
+
 // Start server
 const PORT = process.env.PORT || 5000;
 server.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+
