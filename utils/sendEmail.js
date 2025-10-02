@@ -1,4 +1,4 @@
-const { getTransporter } = require('../config/email');
+const { getTransporter } = require("../config/email");
 
 const sendEmail = async (subject, text, toEmail = process.env.ADMIN_EMAIL) => {
   try {
@@ -6,7 +6,7 @@ const sendEmail = async (subject, text, toEmail = process.env.ADMIN_EMAIL) => {
     if (!transporter) throw new Error("Email transporter not initialized");
 
     const mailOptions = {
-      from: process.env.EMAIL_USER,
+      from: process.env.FROM_EMAIL, // must be a verified sender in SendGrid
       to: toEmail,
       subject,
       text,
