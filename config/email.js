@@ -1,22 +1,25 @@
-const nodemailer = require('nodemailer');
+const nodemailer = require("nodemailer");
 
 let transporter;
 
 const initEmail = () => {
   transporter = nodemailer.createTransport({
     host: "smtp.sendgrid.net",
-    port: 465,
-    secure: true,
+    port: 587,           // STARTTLS
+    secure: false,       // must be false for port 587
     auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS,
+      user: "apikey",                   // always "apikey"
+      pass: process.env.SENDGRID_API_KEY, // your SendGrid API key
     },
     connectionTimeout: 10000, // 10s timeout
   });
 
-  transporter.verify()
+  transporter
+    .verify()
     .then(() => console.log("✅ Email transporter verified"))
-    .catch(err => console.error("❌ Email transporter error:", err.message));
+    .catch((err) =>
+      console.error("❌ Email transporter error:", err.message)
+    );
 };
 
 const getTransporter = () => transporter;
